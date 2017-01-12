@@ -13,9 +13,12 @@
   (let* ((sample-input '("Host one" "extraneous" "\tHostname one.other.com" "\t\tUser doesntmatter" "HostName two.other.com"))
          (sample-data (-magit-gh-pulls-filter-and-split-host-lines sample-input))
          (more-input '("Sir not appearing in this picture" "Host two" "IdentityFile ~/.ssh/HostName" "\tUser Host" "HostName two.host.com"))
-         (bigger-sample (-magit-gh-pulls-filter-and-split-host-lines (append sample-input more-input))))
+         (bigger-sample (-magit-gh-pulls-filter-and-split-host-lines (append sample-input more-input)))
+         (multialias-input '("Host one two" "extraneous" "\tHostname one.other.com" "\t\tUser doesntmatter" "HostName two.other.com"))
+         (multialias-data (-magit-gh-pulls-filter-and-split-host-lines multialias-input)))
     (should (equal (magit-gh-pulls-get-host-hostnames sample-data) '(("one" . ("two.other.com" "one.other.com")))))
-    (should (equal (magit-gh-pulls-get-host-hostnames bigger-sample) '(("two" . ("two.host.com")) ("one" . ("two.other.com" "one.other.com")))))))
+    (should (equal (magit-gh-pulls-get-host-hostnames bigger-sample) '(("two" . ("two.host.com")) ("one" . ("two.other.com" "one.other.com")))))
+    (should (equal (magit-gh-pulls-get-host-hostnames multialias-data) '(("two" . ("two.other.com" "one.other.com")) ("one" . ("two.other.com" "one.other.com")))))))
 
 (ert-deftest magit-gh-pulls-parse-url-test ()
   ;;Mock config hosts

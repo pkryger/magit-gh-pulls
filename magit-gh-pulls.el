@@ -146,7 +146,7 @@ config option."
         (rest-lines (cdr config-lines)))
     (while rest-lines
       (if (string= (cadr curline) "Host")
-          (let ((hosts (s-split "\\s*" (cadr (cdr curline)))) ;;List of the host aliases
+          (let ((hosts (s-split "\s+" (cadr (cdr curline)))) ;;List of the host aliases
                 (rest-result (magit-gh-pulls-collect-hostnames rest-lines)))
             (dolist (host hosts)
               ;;Host must be lowercase because the url parser lowercases the string
